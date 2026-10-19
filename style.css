@@ -10,7 +10,7 @@
   --surface: #ffffff;
   --text: #172033;
   --muted: #667085;
-  --border: #e1e7ef;
+  --border: #cbd5e1;
   --danger: #c62828;
   --radius: 14px;
 }
@@ -21,7 +21,7 @@
 
 html {
   min-height: 100%;
-  background-color: var(--background);
+  background: #e2e8f0 !important;
   scroll-behavior: smooth;
 }
 
@@ -29,7 +29,7 @@ body {
   min-height: 100vh;
   margin: 0;
   font-family: Arial, sans-serif;
-  background-color: var(--background);
+  background: #e2e8f0 !important;
   color: var(--text);
   line-height: 1.6;
 }
