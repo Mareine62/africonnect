@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1457d9">
+  <title>AfriConnect — Connexion</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f4fa;
+      color: #17243b;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background: white;
+      padding: 28px 22px;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px #142c5015;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: 800;
+      color: #1457d9;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #68758a;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 21px;
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: bold;
+      margin: 14px 0 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d8e0ec;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #1457d9;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 14px;
+    }
+
+    .primary {
+      background: #1457d9;
+      color: white;
+    }
+
+    .secondary {
+      background: #e9effa;
+      color: #1457d9;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    #message {
+      display: none;
+      padding: 12px;
+      border-radius: 9px;
+      margin-top: 16px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      font-size: 14px;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 22px;
+      color: #1457d9;
+      text-decoration: none;
+    }
+
+    .note {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #68758a;
+      text-align: center;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <div class="logo">🌍 AfriConnect</div>
+
+    <p class="subtitle">
+      Connecte-toi au monde. Partage tes idées.
+    </p>
+
+    <h2 id="formTitle">Créer un compte</h2>
+
+    <form id="authForm">
+      <label for="email">Adresse e-mail</label>
+
+      <input
+        id="email"
+        type="email"
+        autocomplete="email"
+        placeholder="exemple@email.com"
+        required
+      >
+
+      <label for="password">Mot de passe</label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="new-password"
+        minlength="6"
+        placeholder="6 caractères minimum"
+        required
+      >
+
+      <button
+        class="primary"
+        id="submitBtn"
+        type="submit"
+      >
+        Créer mon compte
+      </button>
+    </form>
+
+    <button
+      class="secondary"
+      id="switchBtn"
+      type="button"
+    >
+      J'ai déjà un compte
+    </button>
+
+    <div id="message" role="status" aria-live="polite"></div>
+
+    <a class="back" href="index.html">
+      ← Retour à l'accueil
+    </a>
+
+    <p class="note">
+      AfriConnect ne te demandera jamais ton mot de passe
+      par message. Garde tes identifiants confidentiels.
+    </p>
+  </main>
+
+  <script type="module">
+    const message = document.getElementById("message");
+
+    function showMessage(text, success = false) {
+      message.style.display = "block";
+      message.textContent = text;
+      message.style.background = success ? "#e6f8ed" : "#fff0f0";
+      message.style.color = success ? "#176b3a" : "#a32020";
+    }
+
+    // Vérifie que le navigateur exécute bien ce script.
+    showMessage("Chargement de Firebase...", true);
+
+    try {
+      const { auth } = await import("./firebase.js");
+
+       {const
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+        sendEmailVerification,
+        signOut
+      } = await import(
+        "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js"
+      );
+
+      const form = document.getElementById("authForm");
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const submitBtn = document.getElementById("submitBtn");
+      const switchBtn = document.getElementById("switchBtn");
+      const formTitle = document.getElementById("formTitle");
+
+      let isLogin = false;
+
+      function updateForm() {
+        formTitle.textContent = isLogin
+          ? "Se connecter"
+          : "Créer un compte";
+
+        submitBtn.textContent = isLogin
+          ? "Se connecter"
+          : "Créer mon compte";
+
+        switchBtn.textContent = isLogin
+          ? "Créer un nouveau compte"
+          : "J'ai déjà un compte";
+
+        passwordInput.autocomplete = isLogin
+          ? "current-password"
+          : "new-password";
+
+        message.style.display = "none";
+      }
+
+      switchBtn.addEventListener("click", () => {
+        isLogin = !isLogin;
+        updateForm();
+      });
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        submitBtn.disabled = true;
+        switchBtn.disabled = true;
+
+        showMessage("Traitement en cours...", true);
+
+        try {
+          if (isLogin) {
+            const result = await signInWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+            if (!result.user.emailVerified) {
+              await signOut(auth);
+
+              showMessage(
+                "Ton adresse e-mail n'est pas encore vérifiée. " +
+                "Ouvre l'e-mail de vérification, puis réessaie."
+              );
+
+              return;
+            }
+
+            showMessage("Connexion réussie !", true);
+
+            window.location.href = "index.html";
+
+          } else {
+            const result = await createUserWithEmailAndPassword(
+              auth,
+              email,
+              password
+            );
+
+            try {
+              await sendEmailVerification(result.user, {
+  url: "https://africonnect-ea126.firebaseapp.com/",
+  handleCodeInApp: false
+});
+
+              await signOut(auth);
+
+              isLogin = true;
+              updateForm();
+
+              showMessage(
+                "Compte créé avec succès ! Consulte ta boîte e-mail " +
+                "et clique sur le lien de vérification. " +
+                "Tu pourras ensuite te connecter.",
+                true
+              );
+
+            } catch (verificationError) {
+              console.error(
+                "Erreur d'envoi de vérification :",
+                verificationError
+              );
+
+              showMessage(
+                "Ton compte a été créé, mais l'e-mail de vérification " +
+                "n'a pas pu être envoyé. Code : " +
+                (verificationError.code || "inconnu")
+              );
+            }
+          }
+
+        } catch (error) {
+          console.error("Erreur Firebase :", error);
+
+          const errors = {
+            "auth/email-already-in-use":
+              "Cette adresse possède déjà un compte. Connecte-toi.",
+
+            "auth/invalid-email":
+              "L'adresse e-mail n'est pas valide.",
+
+            "auth/weak-password":
+              "Choisis un mot de passe plus robuste.",
+
+            "auth/invalid-credential":
+              "E-mail ou mot de passe incorrect.",
+
+            "auth/network-request-failed":
+              "Connexion Internet indisponible. Réessaie.",
+
+            "auth/too-many-requests":
+              "Trop de tentatives. Attends avant de réessayer.",
+
+            "auth/operation-not-allowed":
+              "Active E-mail/Mot de passe dans Firebase Authentication.",
+
+            "auth/unauthorized-domain":
+              "Ce domaine n'est pas autorisé dans les paramètres Firebase.",
+
+            "auth/invalid-api-key":
+              "La clé API Firebase est invalide. Vérifie firebase.js.",
+
+            "auth/configuration-not-found":
+              "Vérifie la configuration du projet Firebase."
+          };
+
+          showMessage(
+            errors[error.code] ||
+            "Erreur : " + (error.code || error.message || "inconnue")
+          );
+
+        } finally {
+          submitBtn.disabled = false;
+          switchBtn.disabled = false;
+        }
+      });
+
+      updateForm();
+
+      showMessage(
+        "Firebase est chargé. Tu peux créer un compte ou te connecter.",
+        true
+      );
+
+    } catch (error) {
+      console.error("Erreur de chargement :", error);
+
+      showMessage(
+        "Impossible de charger Firebase. Vérifie que firebase.js " +
+        "existe dans le même dossier, que ses imports sont corrects " +
+        "et que la page est ouverte via un serveur compatible. " +
+        "Détail : " + (error.message || error)
+      );
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0866ff">
+  <title>AfriConnect - Réseau social mondial</title>
+
+  <style>
+    :root {
+      --blue: #0866ff;
+      --background: #f0f2f5;
+      --white: #ffffff;
+      --text: #1c1e21;
+      --muted: #65676b;
+      --border: #e4e6eb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background: var(--background);
+    }
+
+    button, textarea, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .topbar {
+      background: var(--white);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 1px 4px #00000012;
+    }
+
+    .logo {
+      font-size: 25px;
+      font-weight: bold;
+      color: var(--blue);
+      letter-spacing: -1px;
+    }
+
+    .search {
+      width: min(42%, 320px);
+      border: none;
+      border-radius: 25px;
+      padding: 11px 15px;
+      background: var(--background);
+      outline-color: var(--blue);
+    }
+
+    .layout {
+      width: 100%;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px 14px;
+      display: grid;
+      grid-template-columns: 210px minmax(0, 600px) 210px;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .sidebar, .rightbar {
+      position: sticky;
+      top: 80px;
+      align-self: start;
+    }
+
+    .nav-item {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 13px 10px;
+      border: none;
+      background: transparent;
+      border-radius: 9px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .nav-item:hover {
+      background: #e4e6eb;
+    }
+
+    .card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 2px #0000000a;
+    }
+
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      background: #e7efff;
+      color: var(--blue);
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .profile-name {
+      font-weight: bold;
+    }
+
+    .muted {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    h2 {
+      font-size: 19px;
+      margin: 0 0 14px;
+    }
+
+    h3 {
+      font-size: 16px;
+      margin: 0;
+    }
+
+    .composer textarea {
+      width: 100%;
+      resize: vertical;
+      min-height: 85px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px;
+      margin-top: 14px;
+      outline-color: var(--blue);
+    }
+
+    .primary-btn {
+      width: 100%;
+      border: none;
+      background: var(--blue);
+      color: white;
+      border-radius: 8px;
+      padding: 12px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .primary-btn:hover {
+      background: #0757d5;
+    }
+
+    .post-content {
+      line-height: 1.6;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      margin: 17px 0;
+    }
+
+    .post-image {
+      width: 100%;
+      max-height: 350px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+
+    .post-stats {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .post-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .action-btn {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 4px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: bold;
+    }
+
+    .action-btn:hover {
+      background: var(--background);
+    }
+
+    .action-btn.liked {
+      color: var(--blue);
+    }
+
+    .comment-form {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .comment-form input {
+      width: 100%;
+      min-width: 0;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+    }
+
+    .comment-form button {
+      border: none;
+      border-radius: 20px;
+      padding: 0 14px;
+      background: var(--blue);
+      color: white;
+      font-weight: bold;
+    }
+
+    .comment {
+      background: var(--background);
+      border-radius: 12px;
+      padding: 10px;
+      margin-top: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .notice {
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--muted);
+    }
+
+    .empty {
+      text-align: center;
+      padding: 25px 5px;
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 850px) {
+      .layout {
+        grid-template-columns: 160px minmax(0, 1fr);
+        gap: 12px;
+      }
+
+      .rightbar {
+        display: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .topbar {
+        padding: 11px;
+      }
+
+      .logo {
+        font-size: 21px;
+      }
+
+      .search {
+        width: 48%;
+        min-width: 0;
+      }
+
+      .layout {
+        display: block;
+        padding: 12px 9px;
+      }
+
+      .sidebar {
+        position: static;
+        display: flex;
+        gap: 4px;
+        overflow-x: auto;
+        margin-bottom: 12px;
+      }
+
+      .nav-item {
+        width: auto;
+        white-space: nowrap;
+        padding: 10px;
+        font-size: 13px;
+      }
+
+      .card {
+        padding: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="logo">AfriConnect</div>
+    <input
+      class="search"
+      id="searchInput"
+      type="search"
+      placeholder="Rechercher..."
+      aria-label="Rechercher une publication"
+    >
+  </header>
+
+  <main class="layout">
+    <nav class="sidebar" aria-label="Navigation principale">
+      <button class="nav-item" data-view="all">🏠 Fil d'actualité</button>
+      <button class="nav-item" data-view="mine">👤 Mes publications</button>
+      <button class="nav-item" data-view="all">🌍 Découvrir</button>
+    </nav>
+
+    <section>
+      <div class="card composer">
+        <div class="profile">
+          <div class="avatar">A</div>
+          <div>
+            <div class="profile-name">Bienvenue sur AfriConnect</div>
+            <div class="muted">Partage tes idées avec le monde</div>
+          </div>
+        </div>
+
+        <form id="postForm">
+          <textarea
+            id="postText"
+            maxlength="2000"
+            placeholder="Quoi de neuf ?"
+            required
+          ></textarea>
+
+          <button class="primary-btn" type="submit">
+            Publier
+          </button>
+        </form>
+      </div>
+
+      <div id="feed"></div>
+
+      <div class="card notice">
+        <strong>Version de démonstration</strong>
+        <p>
+          Les publications de cette version sont enregistrées
+          uniquement sur cet appareil. Elles ne sont pas encore
+          visibles par les autres utilisateurs.
+        </p>
+      </div>
+    </section>
+
+    <aside class="rightbar">
+      <div class="card">
+        <h3>🌍 AfriConnect</h3>
+        <p class="notice">
+          Un espace pour partager, découvrir et se connecter
+          partout dans le monde.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>Nos prochaines étapes</h3>
+        <p class="notice">
+          Comptes utilisateurs, profils, photos, amis,
+          messagerie et publications en ligne.
+        </p>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    AfriConnect © <span id="year"></span> · Connectons le monde
+  </footer>
+
+  <script>
+    const STORAGE_KEY = "africonnect_posts_v1";
+
+    const demoPosts = [
+      {
+        id: "demo-1",
+        author: "AfriConnect",
+        avatar: "A",
+        text: "Bienvenue sur AfriConnect ! 🌍\n\nUn nouveau réseau pour partager nos idées et nous rapprocher, partout dans le monde.",
+        time: "Publication de démonstration",
+        likes: 3,
+        liked: false,
+        comments: [],
+        mine: false
+      },
+      {
+        id: "demo-2",
+        author: "Communauté mondiale",
+        avatar: "M",
+        text: "Présente-toi en commentaire : de quel pays nous écris-tu ? 👋",
+        time: "Publication de démonstration",
+        likes: 5,
+        liked: false,
+        comments: [],
+        mine: false
+      }
+    ];
+
+    const feed = document.getElementById("feed");
+    const postForm = document.getElementById("postForm");
+    const postText = document.getElementById("postText");
+    const searchInput = document.getElementById("searchInput");
+
+    let posts = loadPosts();
+    let currentView = "all";
+    let searchTerm = "";
+
+    function loadPosts() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+
+        if (saved !== null) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed)) return parsed;
+        }
+      } catch (error) {
+        console.warn("Impossible de lire les publications.", error);
+      }
+
+      return demoPosts.map(post => ({ ...post, comments: [] }));
+    }
+
+    function savePosts() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+      } catch (error) {
+        alert("Le stockage est indisponible. Vérifie ton navigateur.");
+      }
+    }
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[character]);
+    }
+
+    function renderFeed() {
+      const visiblePosts = posts.filter(post => {
+        const matchesView = currentView === "all" || post.mine;
+        const searchable = (post.author + " " + post.text).toLowerCase();
+        return matchesView && searchable.includes(searchTerm);
+      });
+
+      if (visiblePosts.length === 0) {
+        feed.innerHTML = `
+          <div class="card empty">
+            Aucune publication trouvée.
+          </div>`;
+        return;
+      }
+
+      feed.innerHTML = visiblePosts.map(post => `
+        <article class="card" data-post-id="${escapeHTML(post.id)}">
+          <div class="profile">
+            <div class="avatar">${escapeHTML(post.avatar)}</div>
+            <div>
+              <div class="profile-name">${escapeHTML(post.author)}</div>
+              <div class="muted">${escapeHTML(post.time)}</div>
+            </div>
+          </div>
+
+          <div class="post-content">${escapeHTML(post.text)}</div>
+
+          <div class="post-stats">
+            <span>👍 ${post.likes} J'aime</span>
+            <span>${post.comments.length} commentaire(s)</span>
+          </div>
+
+          <div class="post-actions">
+            <button
+              class="action-btn ${post.liked ? "liked" : ""}"
+              data-action="like"
+              type="button"
+            >${post.liked ? "👍 Aimé" : "👍 J'aime"}</button>
+
+            <button
+              class="action-btn"
+              data-action="focus-comment"
+              type="button"
+            >💬 Commenter</button>
+          </div>
+
+          <div class="comments">
+            ${post.comments.map(comment => `
+              <div class="comment">
+                <strong>${escapeHTML(comment.author)}</strong><br>
+                ${escapeHTML(comment.text)}
+              </div>
+            `).join("")}
+          </div>
+
+          <form class="comment-form">
+            <input
+              name="comment"
+              maxlength="500"
+              placeholder="Écrire un commentaire..."
+              aria-label="Écrire un commentaire"
+              required
+            >
+            <button type="submit">Envoyer</button>
+          </form>
+        </article>
+      `).join("");
+    }
+
+    postForm.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const text = postText.value.trim();
+      if (!text) {
+        alert("Écris quelque chose avant de publier.");
+        return;
+      }
+
+      posts.unshift({
+        id: "post-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7),
+        author: "Moi",
+        avatar: "M",
+        text,
+        time: new Date().toLocaleString("fr-FR"),
+        likes: 0,
+        liked: false,
+        comments: [],
+        mine: true
+      });
+
+      savePosts();
+      postText.value = "";
+      currentView = "all";
+      renderFeed();
+    });
+
+    feed.addEventListener("click", event => {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+
+      const article = button.closest("[data-post-id]");
+      const post = posts.find(item => item.id === article.dataset.postId);
+      if (!post) return;
+
+      if (button.dataset.action === "like") {
+        post.liked = !post.liked;
+        post.likes = Math.max(0, post.likes + (post.liked ? 1 : -1));
+        savePosts();
+        renderFeed();
+      }
+
+      if (button.dataset.action === "focus-comment") {
+        article.querySelector('input[name="comment"]').focus();
+      }
+    });
+
+    feed.addEventListener("submit", event => {
+      if (!event.target.matches(".comment-form")) return;
+
+      event.preventDefault();
+
+      const article = event.target.closest("[data-post-id]");
+      const post = posts.find(item => item.id === article.dataset.postId);
+      const input = event.target.elements.comment;
+      const text = input.value.trim();
+
+      if (!post || !text) return;
+
+      post.comments.push({
+        author: "Moi",
+        text
+      });
+
+      savePosts();
+      renderFeed();
+    });
+
+    document.querySelectorAll("[data-view]").forEach(button => {
+      button.addEventListener("click", () => {
+        currentView = button.dataset.view;
+        renderFeed();
+      });
+    });
+
+    searchInput.addEventListener("input", () => {
+      searchTerm = searchInput.value.trim().toLowerCase();
+      renderFeed();
+    });
+
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
+
+    renderFeed();
+  </script>
+</body>
+</html>
