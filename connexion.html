@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#1457d9">
-  <title>AfriConnect — Connexion</title>
+  <meta name="theme-color" content="#123c72">
+
+  <title>Connexion - AfriConnect</title>
 
   <style>
     * {
@@ -13,125 +14,132 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f0f4fa;
-      color: #17243b;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       padding: 20px;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: #f1f5fb;
+      color: #203047;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .container {
       width: 100%;
-      max-width: 420px;
-      background: white;
+      max-width: 430px;
       padding: 28px 22px;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px #142c5015;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(20, 50, 90, 0.12);
     }
 
     .logo {
       text-align: center;
-      font-size: 30px;
-      font-weight: 800;
-      color: #1457d9;
+      color: #123c72;
+      font-size: 28px;
+      font-weight: bold;
       margin-bottom: 8px;
     }
 
     .subtitle {
       text-align: center;
-      color: #68758a;
-      line-height: 1.5;
-      margin-bottom: 24px;
+      color: #68778a;
+      margin-bottom: 25px;
+      font-size: 14px;
     }
 
     h2 {
-      font-size: 21px;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
+      text-align: center;
+      color: #173b69;
+      font-size: 23px;
     }
 
     label {
       display: block;
-      font-size: 14px;
+      margin: 15px 0 7px;
       font-weight: bold;
-      margin: 14px 0 7px;
+      font-size: 14px;
     }
 
     input {
       width: 100%;
-      padding: 14px;
-      border: 1px solid #d8e0ec;
-      border-radius: 10px;
+      padding: 13px;
+      border: 1px solid #cbd5e1;
+      border-radius: 9px;
       font-size: 16px;
       outline: none;
+      background: #fff;
     }
 
     input:focus {
-      border-color: #1457d9;
+      border-color: #1769c2;
+      box-shadow: 0 0 0 2px rgba(23, 105, 194, 0.12);
     }
 
     button {
       width: 100%;
+      padding: 13px;
       border: none;
-      border-radius: 10px;
-      padding: 14px;
-      font-size: 16px;
+      border-radius: 9px;
+      font-size: 15px;
       font-weight: bold;
       cursor: pointer;
-      margin-top: 14px;
-    }
-
-    .primary {
-      background: #1457d9;
-      color: white;
-    }
-
-    .secondary {
-      background: #e9effa;
-      color: #1457d9;
+      margin-top: 16px;
     }
 
     button:disabled {
-      opacity: .6;
+      opacity: 0.6;
       cursor: wait;
     }
 
-    #message {
-      display: none;
-      padding: 12px;
-      border-radius: 9px;
-      margin-top: 16px;
-      line-height: 1.5;
-      overflow-wrap: anywhere;
-      font-size: 14px;
+    .primary {
+      background: #1769c2;
+      color: #ffffff;
+    }
+
+    .secondary {
+      background: #e8f1fc;
+      color: #174d87;
+      border: 1px solid #c9ddf5;
     }
 
     .back {
       display: block;
       text-align: center;
       margin-top: 22px;
-      color: #1457d9;
+      color: #1769c2;
       text-decoration: none;
+      font-size: 14px;
+    }
+
+    #message {
+      display: none;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 18px;
+      font-size: 14px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
     }
 
     .note {
-      margin-top: 20px;
+      margin-top: 22px;
       font-size: 12px;
-      color: #68758a;
+      color: #68778a;
+      line-height: 1.6;
       text-align: center;
-      line-height: 1.5;
     }
   </style>
 </head>
 
 <body>
   <main class="container">
-    <div class="logo">🌍 AfriConnect</div>
+
+    <div class="logo">AfriConnect</div>
 
     <p class="subtitle">
-      Connecte-toi au monde. Partage tes idées.
+      Connecte-toi et retrouve ta communauté.
     </p>
 
     <h2 id="formTitle">Créer un compte</h2>
@@ -158,11 +166,7 @@
         required
       >
 
-      <button
-        class="primary"
-        id="submitBtn"
-        type="submit"
-      >
+      <button class="primary" id="submitBtn" type="submit">
         Créer mon compte
       </button>
     </form>
@@ -185,10 +189,24 @@
       AfriConnect ne te demandera jamais ton mot de passe
       par message. Garde tes identifiants confidentiels.
     </p>
+
   </main>
 
   <script type="module">
     const message = document.getElementById("message");
+    const form = document.getElementById("authForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const switchBtn = document.getElementById("switchBtn");
+    const formTitle = document.getElementById("formTitle");
+
+    let isLogin = false;
+    let auth = null;
+    let createUserWithEmailAndPassword;
+    let signInWithEmailAndPassword;
+    let sendEmailVerification;
+    let signOut;
 
     function showMessage(text, success = false) {
       message.style.display = "block";
@@ -197,173 +215,64 @@
       message.style.color = success ? "#176b3a" : "#a32020";
     }
 
-    // Vérifie que le navigateur exécute bien ce script.
+    function updateForm() {
+      formTitle.textContent = isLogin
+        ? "Se connecter"
+        : "Créer un compte";
+
+      submitBtn.textContent = isLogin
+        ? "Se connecter"
+        : "Créer mon compte";
+
+      switchBtn.textContent = isLogin
+        ? "Créer un nouveau compte"
+        : "J'ai déjà un compte";
+
+      passwordInput.autocomplete = isLogin
+        ? "current-password"
+        : "new-password";
+
+      passwordInput.setAttribute(
+        "minlength",
+        isLogin ? "1" : "6"
+      );
+
+      message.style.display = "none";
+    }
+
+    // Le bouton reste accessible même si Firebase ne se charge pas.
+    switchBtn.addEventListener("click", () => {
+      isLogin = !isLogin;
+      updateForm();
+    });
+
+    // Affiche immédiatement un message utile.
     showMessage("Chargement de Firebase...", true);
 
     try {
-      const { auth } = await import("./firebase.js");
+      const firebaseModule = await import("./firebase.js");
+      auth = firebaseModule.auth;
 
-       {const
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword,
-        sendEmailVerification,
-        signOut
-      } = await import(
+      if (!auth) {
+        throw new Error(
+          "L'export auth est absent de firebase.js."
+        );
+      }
+
+      const firebaseAuthModule = await import(
         "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js"
       );
 
-      const form = document.getElementById("authForm");
-      const emailInput = document.getElementById("email");
-      const passwordInput = document.getElementById("password");
-      const submitBtn = document.getElementById("submitBtn");
-      const switchBtn = document.getElementById("switchBtn");
-      const formTitle = document.getElementById("formTitle");
+      createUserWithEmailAndPassword =
+        firebaseAuthModule.createUserWithEmailAndPassword;
 
-      let isLogin = false;
+      signInWithEmailAndPassword =
+        firebaseAuthModule.signInWithEmailAndPassword;
 
-      function updateForm() {
-        formTitle.textContent = isLogin
-          ? "Se connecter"
-          : "Créer un compte";
+      sendEmailVerification =
+        firebaseAuthModule.sendEmailVerification;
 
-        submitBtn.textContent = isLogin
-          ? "Se connecter"
-          : "Créer mon compte";
-
-        switchBtn.textContent = isLogin
-          ? "Créer un nouveau compte"
-          : "J'ai déjà un compte";
-
-        passwordInput.autocomplete = isLogin
-          ? "current-password"
-          : "new-password";
-
-        message.style.display = "none";
-      }
-
-      switchBtn.addEventListener("click", () => {
-        isLogin = !isLogin;
-        updateForm();
-      });
-
-      form.addEventListener("submit", async (event) => {
-        event.preventDefault();
-
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        submitBtn.disabled = true;
-        switchBtn.disabled = true;
-
-        showMessage("Traitement en cours...", true);
-
-        try {
-          if (isLogin) {
-            const result = await signInWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
-
-            if (!result.user.emailVerified) {
-              await signOut(auth);
-
-              showMessage(
-                "Ton adresse e-mail n'est pas encore vérifiée. " +
-                "Ouvre l'e-mail de vérification, puis réessaie."
-              );
-
-              return;
-            }
-
-            showMessage("Connexion réussie !", true);
-
-            window.location.href = "index.html";
-
-          } else {
-            const result = await createUserWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
-
-            try {
-              await sendEmailVerification(result.user, {
-  url: "https://africonnect-ea126.firebaseapp.com/",
-  handleCodeInApp: false
-});
-
-              await signOut(auth);
-
-              isLogin = true;
-              updateForm();
-
-              showMessage(
-                "Compte créé avec succès ! Consulte ta boîte e-mail " +
-                "et clique sur le lien de vérification. " +
-                "Tu pourras ensuite te connecter.",
-                true
-              );
-
-            } catch (verificationError) {
-              console.error(
-                "Erreur d'envoi de vérification :",
-                verificationError
-              );
-
-              showMessage(
-                "Ton compte a été créé, mais l'e-mail de vérification " +
-                "n'a pas pu être envoyé. Code : " +
-                (verificationError.code || "inconnu")
-              );
-            }
-          }
-
-        } catch (error) {
-          console.error("Erreur Firebase :", error);
-
-          const errors = {
-            "auth/email-already-in-use":
-              "Cette adresse possède déjà un compte. Connecte-toi.",
-
-            "auth/invalid-email":
-              "L'adresse e-mail n'est pas valide.",
-
-            "auth/weak-password":
-              "Choisis un mot de passe plus robuste.",
-
-            "auth/invalid-credential":
-              "E-mail ou mot de passe incorrect.",
-
-            "auth/network-request-failed":
-              "Connexion Internet indisponible. Réessaie.",
-
-            "auth/too-many-requests":
-              "Trop de tentatives. Attends avant de réessayer.",
-
-            "auth/operation-not-allowed":
-              "Active E-mail/Mot de passe dans Firebase Authentication.",
-
-            "auth/unauthorized-domain":
-              "Ce domaine n'est pas autorisé dans les paramètres Firebase.",
-
-            "auth/invalid-api-key":
-              "La clé API Firebase est invalide. Vérifie firebase.js.",
-
-            "auth/configuration-not-found":
-              "Vérifie la configuration du projet Firebase."
-          };
-
-          showMessage(
-            errors[error.code] ||
-            "Erreur : " + (error.code || error.message || "inconnue")
-          );
-
-        } finally {
-          submitBtn.disabled = false;
-          switchBtn.disabled = false;
-        }
-      });
+      signOut = firebaseAuthModule.signOut;
 
       updateForm();
 
@@ -373,15 +282,161 @@
       );
 
     } catch (error) {
-      console.error("Erreur de chargement :", error);
+      console.error("Erreur de chargement Firebase :", error);
 
       showMessage(
         "Impossible de charger Firebase. Vérifie que firebase.js " +
-        "existe dans le même dossier, que ses imports sont corrects " +
-        "et que la page est ouverte via un serveur compatible. " +
+        "est dans le même dossier et que sa configuration est correcte. " +
         "Détail : " + (error.message || error)
       );
     }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (
+        !auth ||
+        !createUserWithEmailAndPassword ||
+        !signInWithEmailAndPassword
+      ) {
+        showMessage(
+          "Firebase n'est pas prêt. Actualise la page et réessaie."
+        );
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      submitBtn.disabled = true;
+      switchBtn.disabled = true;
+
+      showMessage("Traitement en cours...", true);
+
+      try {
+        if (isLogin) {
+          const result = await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          if (!result.user.emailVerified) {
+            await signOut(auth);
+
+            showMessage(
+              "Ton adresse e-mail n'est pas encore vérifiée. " +
+              "Ouvre l'e-mail de vérification, puis réessaie."
+            );
+
+            return;
+          }
+
+          showMessage("Connexion réussie !", true);
+
+          window.location.href = "index.html";
+          return;
+
+        } else {
+          const result = await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+          try {
+            await sendEmailVerification(result.user, {
+              url: "https://mareine62.github.io/africonnect/",
+              handleCodeInApp: false
+            });
+
+            await signOut(auth);
+
+            isLogin = true;
+            updateForm();
+
+            showMessage(
+              "Compte créé avec succès ! Consulte ta boîte e-mail " +
+              "et clique sur le lien de vérification. " +
+              "Tu pourras ensuite te connecter.",
+              true
+            );
+
+          } catch (verificationError) {
+            console.error(
+              "Erreur de vérification :",
+              verificationError
+            );
+
+            try {
+              await signOut(auth);
+            } catch (logoutError) {
+              console.error(logoutError);
+            }
+
+            isLogin = true;
+            updateForm();
+
+            showMessage(
+              "Ton compte a été créé, mais l'e-mail de vérification " +
+              "n'a pas pu être envoyé. Tu peux réessayer avec un " +
+              "nouveau compte uniquement si nécessaire. Code : " +
+              (verificationError.code || "inconnu")
+            );
+          }
+        }
+
+      } catch (error) {
+        console.error("Erreur Firebase :", error);
+
+        const errors = {
+          "auth/email-already-in-use":
+            "Cette adresse possède déjà un compte. Connecte-toi.",
+
+          "auth/invalid-email":
+            "L'adresse e-mail n'est pas valide.",
+
+          "auth/weak-password":
+            "Choisis un mot de passe d'au moins 6 caractères.",
+
+          "auth/invalid-credential":
+            "E-mail ou mot de passe incorrect.",
+
+          "auth/user-not-found":
+            "Aucun compte trouvé avec cette adresse.",
+
+          "auth/wrong-password":
+            "Mot de passe incorrect.",
+
+          "auth/network-request-failed":
+            "Connexion Internet indisponible. Réessaie.",
+
+          "auth/too-many-requests":
+            "Trop de tentatives. Attends avant de réessayer.",
+
+          "auth/operation-not-allowed":
+            "Active E-mail/Mot de passe dans Firebase Authentication.",
+
+          "auth/unauthorized-domain":
+            "Ce domaine n'est pas autorisé dans Firebase Authentication.",
+
+          "auth/invalid-api-key":
+            "La clé API Firebase est invalide. Vérifie firebase.js.",
+
+          "auth/configuration-not-found":
+            "Vérifie la configuration du projet Firebase."
+        };
+
+        showMessage(
+          errors[error.code] ||
+          "Erreur : " + (error.code || error.message || "inconnue")
+        );
+
+      } finally {
+        submitBtn.disabled = false;
+        switchBtn.disabled = false;
+      }
+    });
   </script>
 </body>
 </html>
