@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AfriConnect - Tableau de bord</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f6fb;
+      color: #172033;
+    }
+
+    header {
+      background: #102b55;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+    }
+
+    main {
+      width: 92%;
+      max-width: 850px;
+      margin: 25px auto;
+    }
+
+    .welcome, .card {
+      background: white;
+      padding: 22px;
+      margin-bottom: 18px;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px #0000000d;
+    }
+
+    .card h2 {
+      color: #102b55;
+      margin-top: 0;
+    }
+
+    .email {
+      overflow-wrap: anywhere;
+      color: #087f5b;
+    }
+
+    .actions {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    }
+
+    a, button {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      text-align: center;
+      text-decoration: none;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    a {
+      background: #e7efff;
+      color: #102b55;
+    }
+
+    button {
+      background: #c62828;
+      color: white;
+    }
+
+    .note {
+      font-size: 14px;
+      color: #596579;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>AfriConnect</h1>
+    <p>Ton espace personnel</p>
+  </header>
+
+  <main>
+    <section class="welcome">
+      <h2>Bienvenue sur AfriConnect !</h2>
+      <p>Tu es connecté avec l’adresse :</p>
+      <p id="userEmail" class="email">Vérification de la connexion...</p>
+    </section>
+
+    <section class="card">
+      <h2>Mon tableau de bord</h2>
+      <p>Ton espace personnel AfriConnect est prêt.</p>
+      <p class="note">
+        Nous ajouterons progressivement les fonctionnalités de la plateforme.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Navigation</h2>
+      <div class="actions">
+        <a href="index.html">Accueil</a>
+        <button id="logoutButton" type="button">Déconnexion</button>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { auth } from "./firebase.js";
+    import {
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+
+    const userEmail = document.getElementById("userEmail");
+    const logoutButton = document.getElementById("logoutButton");
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user || !user.emailVerified) {
+        window.location.replace("connexion.html");
+        return;
+      }
+
+      userEmail.textContent = user.email;
+    });
+
+    logoutButton.addEventListener("click", async () => {
+      logoutButton.disabled = true;
+
+      try {
+        await signOut(auth);
+        window.location.replace("connexion.html");
+      } catch (error) {
+        alert("Impossible de se déconnecter. Réessaie.");
+        logoutButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>

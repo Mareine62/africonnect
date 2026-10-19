@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messages - AfriConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>AfriConnect</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="dashboard.html">Tableau de bord</a>
+            <a href="profil.html">Mon profil</a>
+            <a href="publications.html">Publications</a>
+            <a href="amis.html">Mes amis</a>
+            <a href="messages.html">Messages</a>
+            <a href="notifications.html">Notifications</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Envoyer un message</h2>
+            <p>Pour le moment, indique l'identifiant Firebase du destinataire.</p>
+
+            <form id="messageForm">
+                <label for="recipientUid">Identifiant du destinataire</label>
+                <input
+                    type="text"
+                    id="recipientUid"
+                    placeholder="Identifiant Firebase du membre"
+                    required
+                >
+
+                <label for="messageContent">Ton message</label>
+                <textarea
+                    id="messageContent"
+                    rows="5"
+                    maxlength="3000"
+                    placeholder="Écris ton message..."
+                    required
+                ></textarea>
+
+                <button type="submit">Envoyer le message</button>
+            </form>
+
+            <p id="messageStatus" role="status"></p>
+        </section>
+
+        <section class="card">
+            <h2>Ma boîte de messages</h2>
+            <div id="messagesList">
+                <p>Chargement des messages...</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>AfriConnect — Connectons nos communautés.</p>
+    </footer>
+
+    <script type="module" src="js/messages.js"></script>
+</body>
+</html>

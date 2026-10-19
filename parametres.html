@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres - AfriConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>AfriConnect</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="dashboard.html">Tableau de bord</a>
+            <a href="profil.html">Mon profil</a>
+            <a href="publications.html">Publications</a>
+            <a href="amis.html">Mes amis</a>
+            <a href="messages.html">Messages</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="parametres.html">Paramètres</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Paramètres de mon compte</h2>
+            <p>Modifie les informations de ton profil.</p>
+
+            <form id="settingsForm">
+                <label for="settingsName">Nom affiché</label>
+                <input
+                    type="text"
+                    id="settingsName"
+                    maxlength="60"
+                    placeholder="Ton nom"
+                    required
+                >
+
+                <label for="settingsBio">Présentation</label>
+                <textarea
+                    id="settingsBio"
+                    rows="4"
+                    maxlength="300"
+                    placeholder="Présente-toi en quelques mots..."
+                ></textarea>
+
+                <label for="settingsEmail">Adresse e-mail</label>
+                <input
+                    type="email"
+                    id="settingsEmail"
+                    readonly
+                >
+
+                <button type="submit">Enregistrer les modifications</button>
+            </form>
+
+            <p id="settingsStatus" role="status"></p>
+        </section>
+
+        <section class="card">
+            <h2>Déconnexion</h2>
+            <p>Déconnecte-toi lorsque tu as terminé.</p>
+            <button type="button" id="settingsLogout">
+                Se déconnecter
+            </button>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>AfriConnect — Connectons nos communautés.</p>
+    </footer>
+
+    <script type="module" src="js/parametres.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - AfriConnect</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <h1>AfriConnect</h1>
+        <nav>
+            <a href="index.html">Accueil</a>
+            <a href="dashboard.html">Tableau de bord</a>
+            <a href="profil.html">Mon profil</a>
+            <a href="publications.html">Publications</a>
+            <a href="amis.html">Mes amis</a>
+            <a href="messages.html">Messages</a>
+            <a href="notifications.html">Notifications</a>
+            <a href="parametres.html">Paramètres</a>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>Mes notifications</h2>
+            <p>Retrouve ici les notifications liées à ton compte AfriConnect.</p>
+
+            <p id="notificationStatus" role="status">
+                Chargement des notifications...
+            </p>
+
+            <div id="notificationsList">
+                <p>Les notifications apparaîtront ici.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>AfriConnect — Connectons nos communautés.</p>
+    </footer>
+
+    <script type="module" src="js/notifications.js"></script>
+</body>
+</html>
